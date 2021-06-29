@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyFirebaseDBExercise</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="save_text">Save</string>
+    <string name="hint">Name</string>
+
 </resources>

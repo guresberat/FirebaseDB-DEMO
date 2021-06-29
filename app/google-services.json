@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "771319093498",
+    "firebase_url": "https://myfirebasedbexercise-default-rtdb.firebaseio.com",
+    "project_id": "myfirebasedbexercise",
+    "storage_bucket": "myfirebasedbexercise.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771319093498:android:7a1b11d727891a61f0d143",
+        "android_client_info": {
+          "package_name": "com.guresberat.myfirebasedbexercise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "771319093498-m1df8i6ks7g5p1pebs64p2ervuv4jmkm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.guresberat.myfirebasedbexercise",
+            "certificate_hash": "491391244c476a73c8c9f5c69f2a05c7d75232c6"
+          }
+        },
+        {
+          "client_id": "771319093498-ip9ckd9jfkdinsm7mp7eejjga12n65sd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBph19NwTWiYZ0H5RGegYsC41rqLL9YSD4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "771319093498-ip9ckd9jfkdinsm7mp7eejjga12n65sd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
