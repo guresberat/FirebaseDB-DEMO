@@ -1,5 +1,5 @@
 package com.guresberat.myfirebasedbexercise
 
-class Movie(val name: String = " ", val rating: Int = 0){
+class Movie(val id: String ="",val name: String = " ", val rating: Int = 0){
 
 }

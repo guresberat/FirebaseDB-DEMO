@@ -6,23 +6,33 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.guresberat.myfirebasedbexercise.Movie
+import com.guresberat.myfirebasedbexercise.OnItemClick
 import com.guresberat.myfirebasedbexercise.R
+import com.guresberat.myfirebasedbexercise.fragments.adapter.RecyclerViewAdapter
 
-class ListFragment : Fragment() {
-    private lateinit var root: LinearLayout
+class ListFragment : Fragment(), OnItemClick {
+    private lateinit var root: ConstraintLayout
     private lateinit var movieList: MutableList<Movie>
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    private lateinit var recyclerViewAdapter: RecyclerViewAdapter
+    private var list = ArrayList<Movie>()
+    private val valueEventListener: ValueEventListener = object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            createData(dataSnapshot)
+        }
+        override fun onCancelled(databaseError: DatabaseError) {
+            Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
+        }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,39 +48,39 @@ class ListFragment : Fragment() {
         movieList = mutableListOf()
         root = view.findViewById(R.id.root)
 
+        initRecyclerView()
+
         val ref = FirebaseDatabase.getInstance().getReference("Movies")
 
-        ref.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var i = 0
-                var list = ArrayList<Movie>()
-                for (data in dataSnapshot.children) {
-                    var model = data.getValue(Movie::class.java)
-                    list.add(model as Movie)
-                }
-                while (i < list.size) {
-                    addButton(list[i].name, list[i].rating.toString())
-                    i++
-                }
-            }
-
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
-            }
-        })
+        ref.addValueEventListener(valueEventListener)
     }
 
+    private fun createData(dataSnapshot: DataSnapshot) {
+        list.clear()
+        for (data in dataSnapshot.children) {
+            val model = data.getValue(Movie::class.java)
+            list.add(model as Movie)
+        }
+        recyclerViewAdapter.submitList(list)
+    }
 
-    private fun addButton(title: String, rating: String) {
-        val button = Button(context)
-        button.text = "Name : $title Rating: $rating"
-        root.addView(button)
-        button.setOnClickListener {
-            root.removeView(it)
-            //need a function to remove nodes from the db with button
+    private fun initRecyclerView() {
+        view?.findViewById<RecyclerView>(R.id.recycler_view)?.apply {
+            recyclerViewAdapter = RecyclerViewAdapter(this@ListFragment)
+            adapter = recyclerViewAdapter
+            layoutManager = LinearLayoutManager(context)
         }
     }
+
+    private fun removeFromDB(id: String) {
+        val ref = FirebaseDatabase.getInstance().getReference("Movies")
+        ref.addValueEventListener(valueEventListener)
+        ref.child(id).setValue(null)
+    }
+
+    override fun onItemClicked(id: String) {
+        removeFromDB(id)
+    }
+
 }
 

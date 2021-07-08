@@ -51,10 +51,13 @@ class RegisterFragment : Fragment() {
 
         val ref = FirebaseDatabase.getInstance().getReference("Movies")
         val movieId = ref.push().key
-        val movie = Movie(name, ratingBar.rating.toInt())
-        ref.child(movieId!!).setValue(movie).addOnCompleteListener {
-            Toast.makeText(activity, "Movie added to list", Toast.LENGTH_SHORT).show()
+        val movie = movieId?.let { Movie(it,name, ratingBar.rating.toInt()) }
+        movieId?.let { id ->
+            ref.child(id).setValue(movie).addOnCompleteListener {
+                Toast.makeText(requireActivity(), "Movie added to list", Toast.LENGTH_SHORT).show()
+            }
+            name_editText.setText("")
+            ratingBar.rating = 0.0F
         }
-        name_editText.setText("")
     }
 }
